@@ -227,10 +227,10 @@ def cache_Murs_extremes(murs=murs_Globaux):
             # trouver les murs / robots les plus proches dans toutes les directions
             up_y, down_y = extremes(actuel_y, ys)
             right_x, left_x = extremes(actuel_x, xs)
-            """print("Haut " + format(up_y) )
+            print("Haut " + format(up_y) )
             print("bas " + format(down_y))
             print("droit " + format(right_x))
-            print("gauche " + format(left_x))"""
+            print("gauche " + format(left_x))
 
             extreme_cache[(actuel_x, actuel_y)] = (up_y, down_y, right_x, left_x)
            # print(format(extreme_cache))
@@ -286,7 +286,7 @@ def affichage_de_Carte(robots, murs, objectif=None):
     robots: dictionary of name: (x,y)
     murs: liste de type (x,y) tuples
     objectif: objectif (x,y)"""
-    board = get_empty_board(TAILLE_DE_LA_CARTE)
+    board = obtenir_emplacement_vide(TAILLE_DE_LA_CARTE)
 
     # ajouter  murs
     for x, y in murs:
@@ -299,22 +299,22 @@ def affichage_de_Carte(robots, murs, objectif=None):
     # ajouter l'objectif
     if objectif is not None:
         x, y = objectif
-        board[int(y * 2)][int(x * 2)] = render_item("goal")
+        board[int(y * 2)][int(x * 2)] = obtenir_Couleur("goal")
 
     # ajouter les 4 robots
     for name, (x, y) in robots.items():
-        board[int(y * 2)][int(x * 2)] = render_item(name)
+        board[int(y * 2)][int(x * 2)] = obtenir_Couleur(name)
 
     board.reverse()  # parce que l'indexation de liste est à l'envers
-    board = draw_frame(board)
-    board = draw_corners(board)
+    board = cadre_Carte(board)
+    board = arrondir_Angles(board)
 
     # affichage de la carte
     for row in board:
         print(colored("".join(row)))
 
 
-def draw_frame(board):
+def cadre_Carte(board):
     """Dessine la bordure """
     n_rows = len(board)
     n_cols = len(board[0])
@@ -327,7 +327,7 @@ def draw_frame(board):
         new_board.append(new_row)
     return [top_row] + new_board + [bottom_row]
 
-def draw_corners(board):
+def arrondir_Angles(board):
     """Dessine les coins"""
     for y in range(2, len(board)-2):
         for x in range(2, len(board[0])-2):
@@ -356,7 +356,7 @@ def draw_corners(board):
     return board
 
 
-def render_item(name):
+def obtenir_Couleur(name):
     """Donner un couleur a chaque Robot"""
     # couleur 
     BLUE = '\033[94m'
@@ -382,7 +382,7 @@ def render_item(name):
     return color + name[0:2].upper() + ENDC
 
 
-def get_empty_board(n):
+def obtenir_emplacement_vide(n):
     """Ajouter les points et l'emplacement vide"""
     bordure = []
     for y in range(TAILLE_DE_LA_CARTE * 2 - 1):
