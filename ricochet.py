@@ -48,7 +48,7 @@ def BFS(etat_de_départ, robot_principal, objectif, robots_qui_deplacent=None, l
     # quels robots sommes-nous autorisés à déplacer?
     if robots_qui_deplacent is None:
         robots_qui_deplacent = etat_de_départ["robots"].keys()
-
+    # BFS
     while len(q) > 0:
         etat = q.popleft()
         if etat["cost"] > nbre_Coups:
@@ -58,16 +58,16 @@ def BFS(etat_de_départ, robot_principal, objectif, robots_qui_deplacent=None, l
             if new_cost > cost:
                 cost = new_cost
                 print("Eatpe: {} Temps: {}".format(cost, time.time() - t0))
-
+        
         etats_suivants = []
         for nom_Robot in robots_qui_deplacent:
             deplacement = obtenir_deplacement_robots(nom_Robot, etat)
             etats_suivants.extend(obtenir_prochains_etats(nom_Robot, deplacement, etat, blacklist))
-
-        for next_state in etats_suivants:
-            if gagner(next_state, robot_principal, objectif):
-                return next_state
-            q.append(next_state)
+          
+        for etats_suivant in etats_suivants:
+            if gagner(etats_suivant, robot_principal, objectif):
+                return etats_suivant
+            q.append(etats_suivant)
     return None
 
 def gagner(etat, nom_Robot, objectif):
